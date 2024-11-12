@@ -98,6 +98,8 @@ function CreatePost() {
                 <option value='javascript'>Javascript</option>
                 <option value='nextJS'>NextJS</option>
                 <option value='reactJS'>ReactJS</option>
+                <option value='doisong'>Đời sống</option>
+                <option value='xahoi'>Xã hội</option>
             </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
