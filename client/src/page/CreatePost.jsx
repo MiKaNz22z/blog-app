@@ -100,6 +100,7 @@ function CreatePost() {
                 <option value='reactJS'>ReactJS</option>
                 <option value='doisong'>Đời sống</option>
                 <option value='xahoi'>Xã hội</option>
+                <option value='thethao'>Thể thao</option>
             </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
