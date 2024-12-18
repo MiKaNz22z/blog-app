@@ -15,7 +15,7 @@ function CreatePost() {
   const [formData, setFormData] = useState({})
   const [publlishError, setPublishError] = useState(null);
 
-  const nagivate = useNavigate();
+  const navigate = useNavigate();
   
   const handleUploadImage = () => {
     try {
@@ -68,7 +68,7 @@ function CreatePost() {
       }
       if(res.ok) {
         setPublishError(null);
-        nagivate(`/post/${data.slug}`);
+        navigate(`/post/${data.slug}`);
       }
     } catch (error) {
       setPublishError("Something went wrong. Please try again later");
