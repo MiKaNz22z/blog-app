@@ -2,6 +2,7 @@ import { Select, TextInput, Button } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import PostCard from '../components/PostCard';
+import CardSearch from '../components/CardSearch';
 
 function Search() {
     const [ sidebarData, setsidebarData ] = useState({
@@ -125,9 +126,9 @@ function Search() {
                 </label>
                 <Select onChange={handleChannge} value={sidebarData.category} id='category'>
                     <option value='uncategorized'>Uncategorized</option>
-                    <option value='javascript'>Javascript</option>
-                    <option value='nextJS'>NextJS</option>
-                    <option value='reactJS'>ReactJS</option>
+                    <option value='game'>Game</option>
+                    <option value='congnghe'>Công nghệ</option>
+                    <option value='suckhoe'>Sức khỏe</option>
                     <option value='doisong'>Đời sống</option>
                     <option value='xahoi'>Xã hội</option>
                     <option value='thethao'>Thể thao</option>
@@ -149,7 +150,7 @@ function Search() {
             }
             {
                 !loading && posts && posts.map((post)=>(
-                    <PostCard key={post._id} post={post} />
+                    <CardSearch key={post._id} post={post} />
                 ))
             }
             {

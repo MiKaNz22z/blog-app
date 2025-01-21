@@ -8,8 +8,15 @@ export default {
     flowbite.content(),
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'semi-sm': '760px',
+        'md': '830px',  // Thay đổi giá trị md từ 768px thành 820px
+        'semi-lg': '1200px'
+      },
+    },
   },
   plugins: [flowbite.plugin(), require('tailwind-scrollbar'),require('@tailwindcss/line-clamp'),],
 }
+
 

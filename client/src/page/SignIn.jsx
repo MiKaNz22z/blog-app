@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import { FaEnvelope } from "react-icons/fa6";
+import { FaLock } from "react-icons/fa6";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -43,31 +45,50 @@ export default function SignIn() {
   }
   console.log(formData);
   return (
-    <div className="min-h-screen mt-20">
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
+    <div className="min-h-screen py-20 bg-slate-100">
+      <div className="flex p-6 max-w-5xl mx-auto flex-col md:flex-row md:items-center gap-5 bg-white shadow-md">
         {/* left */}
         <div className="flex-1">
-          <Link to="/" className="font-bold dark:text-white text-4xl">
+          <img src="https://miro.medium.com/v2/resize:fit:828/format:webp/1*yBt65HhmARbqZDDJ1McFDg.png" alt="" />
+          {/* <Link to="/" className="font-bold dark:text-white text-4xl">
               <span className="p-2 bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 rounded-lg text-white">Zakuro&apos;s</span>
               Blog
           </Link>
           <p className="text-sm mt-5">
             This is a demo project. You can sign in with your email and password or with Google
-          </p>
+          </p> */}
         </div>
         {/* right */}
         <div className="flex-1">
+          <h2 className="text-3xl text-center font-bold uppercase text-black mb-4">Sign in</h2>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <div className="">
+            {/* <div className="">
               <Label value="Your email"></Label>
               <TextInput type="email" placeholder="name@company.com" id='email'onChange={handleChange}/>
+            </div> */}
+
+            <div className="my-4 relative">
+              <input
+                type="email"
+                className=" w-full px-3 py-2 border-0 border-b-2 placeholder:text-gray-600 border-gray-600 focus:outline-none focus:border-gray-600 focus:no-ring"
+                placeholder="Email Address"
+                id="email"
+                onChange={handleChange}
+              />
+              <FaEnvelope className="absolute right-2 top-[40%]"/>
             </div>
 
-            <div className="">
-              <Label value="Your password"></Label>
-              <TextInput type="password" placeholder="*********" id='password'onChange={handleChange}/>
+            <div className="relative mb-4">
+              <input 
+                type="password" 
+                className=" w-full px-3 py-2 border-0 border-b-2 placeholder:text-gray-600 border-gray-600 focus:outline-none focus:border-gray-600 focus:no-ring"
+                placeholder="*********" 
+                id='password'
+                onChange={handleChange}
+              />
+              <FaLock className="absolute right-2 top-[40%]"/>
             </div>
-            <Button gradientDuoTone='pinkToOrange'type="submit" disabled={loading}>
+            <button className='mt-4 px-10 py-3 border text-black border-black font-semibold hover:bg-black hover:text-white transition-all' type="submit" disabled={loading}>
               {
                 loading ? (
                   <>
@@ -76,13 +97,13 @@ export default function SignIn() {
                   </>
                 ) : "Sign In"
               }
-            </Button>
+            </button>
 
             <OAuth />
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Don't have an account?</span>
-            <Link to="/sign-up" className="text-blue-500">Sign Up</Link>
+            <Link to="/sign-up" className="text-blue-500 hover:text-gray-800">Sign Up</Link>
           </div>
 
           { errorMessage && (

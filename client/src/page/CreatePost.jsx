@@ -94,10 +94,10 @@ function CreatePost() {
                 setFormData({...formData, category: e.target.value})
               }}
             >
-                <option value='uncategorized'>Select a category</option>
-                <option value='javascript'>Javascript</option>
-                <option value='nextJS'>NextJS</option>
-                <option value='reactJS'>ReactJS</option>
+                <option value='uncategorized'>Uncategorized</option>
+                <option value='game'>Game</option>
+                <option value='congnghe'>Công nghệ</option>
+                <option value='suckhoe'>Sức khỏe</option>
                 <option value='doisong'>Đời sống</option>
                 <option value='xahoi'>Xã hội</option>
                 <option value='thethao'>Thể thao</option>

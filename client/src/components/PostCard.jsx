@@ -1,15 +1,27 @@
 import{ Link } from 'react-router-dom';
 function PostCard({ post }) {
   return (
-    <div className='group relative w-full border border-teal-500 hover:border-2 h-[400px] overflow-hidden rounded-lg sm:w-[360px] transition-all'>
-        <Link to={`/post/${post.slug}`}>
-            <img src={post.image} alt="Post cover" className='h-[260px] w-full object-cover group-hover:h-[200px] transition-all duration-300 z-20' />
-        </Link>
-        <div className="p-3 flex flex-col gap-2">
-            <p className='text-lg font-semibold line-clamp-2'>{post.title}</p>
-            <span className='italic text-sm'>{post.category}</span>
-            <Link to={`/post/${post.slug}`} className='z-10 group-hover:bottom-0 absolute bottom-[-200px] left-0 right-0 border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white transition-all duration-300 text-center py-2 rounded-md !rounded-tl-none m-2'>
-                Read articles
+    <div className="group w-full h-full relative">
+         <img 
+            src={post.image}
+            className="w-full h-full object-cover inset-0" 
+            alt="City Landscape" 
+        />
+        
+        <div className="absolute w-full bottom-0 p-6 pr-16 bg-gradient-to-b from-transparent to-zinc-900">
+            <Link to={`/category?category=${post.category}`} className='bg-gray-700 text-white p-1 text-xs hover:text-black cursor-pointer'>{post.category}</Link>
+            <Link to={`/post/${post.slug}`}>
+              <h2 className='text-white font-semibold text-2xl mt-2'>{post.title}</h2>
+              <div className="flex gap-2 mt-2">
+                <span className='text-white text-xs mr-2'>Admin</span>
+                <span className='text-white text-xs'>
+                  {post && new Date(post.createdAt).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </span>
+              </div>
             </Link>
         </div>
     </div>

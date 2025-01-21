@@ -9,6 +9,13 @@ const postSchema = new mongoose.Schema(
     content: {
       type: String,
       required: true,
+      validate: {
+        validator: function (value) {
+          // Kiểm tra xem chuỗi sau khi trim có rỗng không
+          return value.trim().length > 0;
+        },
+        message: 'Content cannot be empty or just whitespace.',
+      },
     },
     title: {
       type: String,

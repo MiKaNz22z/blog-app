@@ -14,6 +14,11 @@ import UpdatePost from './page/UpdatePost'
 import PostPage from './page/PostPage'
 import ScrollToTop from './components/ScrollToTop'
 import Search from './page/Search'
+import NewHome from './page/NewHome'
+import NewHeader from './components/NewHeader'
+import NewFooter from './components/NewFooter'
+import Category from './page/Category'
+import NewPostPage from './page/NewPostPage'
 
 export default function App() {
   return (
@@ -22,10 +27,13 @@ export default function App() {
       <Header />
       <Routes>
         <Route path='/' element={<Home />}></Route>
+        <Route path='/newhome' element={<NewHome />}></Route>
         <Route path='/about' element={<About />}></Route>
         <Route path='/sign-in' element={<SignIn />}></Route>
         <Route path='/sign-up' element={<SignUp />}></Route>
         <Route path='/search' element={<Search />}></Route>
+        <Route path='/category' element={<Category />}></Route>
+        <Route path='/newpostpage' element={<NewPostPage />}></Route>
         <Route element={<PrivateRoute/>}>
           <Route path='/dashboard' element={<Dashboard />}></Route>
         </Route>
@@ -34,9 +42,9 @@ export default function App() {
           <Route path='/update-post/:postId' element={<UpdatePost />}></Route>
         </Route>
         <Route path='/projects' element={<Projects />}></Route>
-        <Route path='/post/:postSlug' element={<PostPage />}></Route>
+        <Route path='/post/:postSlug' element={<NewPostPage />}></Route>
       </Routes>
-      <Footer />
+      <NewFooter />
     </BrowserRouter>
   )
 }

@@ -1,11 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html {
+    background-color: #F7F7F8;
+}
+
 body{
     height: 100vh;
+    background-color: #000 !important;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Lora', serif;
 }
 
 .ql-editor{
@@ -17,15 +27,17 @@ body{
 }
 
 .post-content h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 600;
-    font-family: "Noto Sans", sans-serif;
+    font-family: "Lora", sans-serif;
     margin: 1.5rem 0;
+    color: black;
 }
 
 .post-content h2 {
+    color: black;
     font-size: 1.4rem;
-    font-family: "Noto Sans", sans-serif;
+    font-family: "Lora", sans-serif;
     margin: 1.5rem 0;
 }
 
@@ -38,7 +50,53 @@ body{
     text-decoration: underline;
 }
 
+.post-content img {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
 .dark .post-content a{
     color: orange;
+}
+
+/* CSS cho title */
+.title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Giới hạn 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5; /* Điều chỉnh line-height phù hợp */
+    min-height: 3em; /* Đảm bảo chiều cao tối thiểu cho 2 dòng */
+    display: flex;
+    align-items: center; /* Căn giữa nếu chỉ có 1 dòng */
+  }
+  
+  /* CSS cho content */
+  .content {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Giới hạn 3 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @layer utilities {
+    .no-ring {
+      --tw-ring-shadow: none;
+      --tw-ring-color: transparent;
+    }
+  }
+
+  /* Thêm vào file CSS của bạn */
+.drop-cap::first-letter {
+    font-size: 3rem; /* Kích thước chữ cái đầu */
+    float: left;
+    margin-right: 0.5rem;
+    line-height: 1;
+    font-weight: bold;
+    color: #000; /* Màu chữ cái đầu */
 }
  
