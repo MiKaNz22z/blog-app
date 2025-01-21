@@ -65,7 +65,10 @@ function NewPostPage() {
     </div>
   return (
     <div className='bg-slate-100 pt-16'>
-        <div className="bg-white max-w-5xl mx-auto lg:px-20 lg:py-24">
+        <div className="bg-white max-w-5xl mx-auto px-20 py-24
+            max-semi-lg:max-w-4xl
+            max-md:mx-5 max-md:px-10 max-md:py-8
+        ">
             <div className="">
                 <img src={post && post.image} className='w-full' alt="" />
                 <h1 className='text-2xl text-black font-semibold pt-2'>{post && post.title}</h1>
@@ -81,7 +84,10 @@ function NewPostPage() {
             <div dangerouslySetInnerHTML={{__html: post && post.content}} className="mt-6 mx-auto w-full post-content"></div>
         </div>
 
-        <div className="bg-white max-w-5xl mx-auto mt-16 px-10 py-14">
+        <div className="bg-white max-w-5xl mx-auto mt-16 px-10 py-14
+            max-semi-lg:max-w-4xl
+            max-md:mx-5
+        ">
             <h1 className='text-3xl text-black font-semibold'>Must Read</h1>
             <div className="grid grid-cols-2 gap-6 pt-6">
                 {recentPosts && 
@@ -92,7 +98,10 @@ function NewPostPage() {
             </div>
         </div>
 
-        <div className="bg-white max-w-5xl mx-auto mt-16 lg:px-20 lg:py-20">
+        <div className="bg-white max-w-5xl mx-auto mt-16 px-20 py-20
+            max-semi-lg:max-w-4xl
+            max-md:mx-5
+        ">
             <h1 className='text-2xl text-black font-semibold pt-2'>Leave a Comment</h1>
             <CommentSection postId={post._id}/>
         </div>

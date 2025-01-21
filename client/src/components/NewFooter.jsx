@@ -6,7 +6,7 @@ function NewFooter() {
   return (
     <div className='bg-slate-200'>
           <div className="bg-white">
-            <div className="border border-black max-w-7xl mx-auto grid grid-cols-2 max-md:grid-cols-1">
+            <div className="border border-black max-w-7xl mx-auto grid grid-cols-2 max-md:grid-cols-1 ">
               <div className="flex gap-6 px-10 py-12">
                 <div className="text-black">
                   <FaPaperPlane size={28}/>

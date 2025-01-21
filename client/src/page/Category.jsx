@@ -79,9 +79,13 @@ function Category() {
 
     return (
         <div className='bg-slate-100 py-16'>
-            <div className="max-w-7xl mx-auto flex max-md:flex-col">
+            <div className="max-w-7xl mx-auto flex
+                max-md:flex-col max-md:max-w-3xl max-md:mx-5
+                max-semi-lg:max-w-5xl 
+                max-semi-sm:max-w-2xl max-semi-sm:flex-col
+            ">
                 <div className="
-                    w-[70%] border-r border-gray-300 pr-16 mx-5
+                    w-[70%] border-r border-gray-300 pr-16
                     max-md:w-[100%] max-md:pr-0 max-md:border-none
                 ">
                     <h1 className='text-4xl text-blue-700 font-bold m-10'>{categoryFromUrl.toUpperCase()}</h1>
@@ -112,7 +116,7 @@ function Category() {
                 </div>
 
                 {/* Sidebar */}
-                <div className="w-[30%] pl-16 mx-5 max-md:w-[100%] max-md:pr-0 max-md:pl-0">
+                <div className="w-[30%] pl-16 max-md:w-[100%] max-md:pr-0 max-md:pl-0">
                     <h3 className='text-xl font-bold mb-6'>Recent Posts</h3>
                     {posts && posts.length > 0 && (
                       <div className="flex flex-col gap-3 mb-11">
