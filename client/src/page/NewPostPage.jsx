@@ -68,6 +68,7 @@ function NewPostPage() {
         <div className="bg-white max-w-5xl mx-auto px-20 py-24
             max-semi-lg:max-w-4xl
             max-md:mx-5 max-md:px-10 max-md:py-8
+            max-semi-sm:p-5
         ">
             <div className="">
                 <img src={post && post.image} className='w-full' alt="" />
@@ -86,10 +87,11 @@ function NewPostPage() {
 
         <div className="bg-white max-w-5xl mx-auto mt-16 px-10 py-14
             max-semi-lg:max-w-4xl
-            max-md:mx-5
+            max-md:mx-5 max-md:px-10 max-md:py-8
+            max-semi-sm:p-5
         ">
             <h1 className='text-3xl text-black font-semibold'>Must Read</h1>
-            <div className="grid grid-cols-2 gap-6 pt-6">
+            <div className="grid grid-cols-2 gap-6 pt-6 max-semi-sm:grid-cols-1">
                 {recentPosts && 
                     shuffleArray([...recentPosts])
                         .slice(0, 2)
@@ -100,7 +102,8 @@ function NewPostPage() {
 
         <div className="bg-white max-w-5xl mx-auto mt-16 px-20 py-20
             max-semi-lg:max-w-4xl
-            max-md:mx-5
+            max-md:mx-5 max-md:px-10 max-md:py-8
+            max-semi-sm:p-5
         ">
             <h1 className='text-2xl text-black font-semibold pt-2'>Leave a Comment</h1>
             <CommentSection postId={post._id}/>

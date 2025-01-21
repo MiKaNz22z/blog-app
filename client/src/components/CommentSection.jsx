@@ -144,13 +144,19 @@ function CommentSection({postId}) {
                     value={comment}
                     className='rounded-none h-60 focus:bg-white p-5'
                 />
-                <div className="flex justify-between items-center mt-5">
+                <div className="flex justify-between items-center mt-5 gap-4
+                    max-semi-sm:flex-col max-semi-sm:items-start
+                ">
                     <p className='text-gray-500 text-md'>{200 - comment.length} characters remaining</p>
                     {/* <Button outline gradientDuoTone='pinkToOrange' type='submit'>
                         Submit
                     </Button> */}
 
-                    <button className='p-3 font-semibold w-40 border text-black border-black hover:bg-black hover:text-white transition-all' type='submit'>
+                    <button className='p-3 font-semibold w-40 border text-black border-black 
+                        hover:bg-black hover:text-white transition-all
+                        max-semi-sm:w-full' 
+                        type='submit'
+                    >
                         Submit
                     </button>
                 </div>
