@@ -49,15 +49,23 @@ function DashSidebar() {
             )
           }
             <Link to='/dashboard?tab=profile'>
-              <Sidebar.Item active={tab === 'profile'} icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'User'} labelColor='dark' as='div'>
-                  Profile
+              <Sidebar.Item active={tab === 'profile'} icon={HiUser} label={currentUser.isAdmin ? 'Admin' : currentUser.isAuthor ? 'Author' : 'User'} labelColor='dark' as='div'>
+                  Thông tin
               </Sidebar.Item>
             </Link>
 
-            {currentUser.isAdmin && (
+            {(currentUser.isAdmin || currentUser.isAuthor) && (
               <Link to='/dashboard?tab=posts'>
                 <Sidebar.Item active={tab === 'posts'} icon={HiDocumentText} as='div'>
-                  Posts
+                  Bài viết
+                </Sidebar.Item>
+              </Link>
+            )}
+
+            {(currentUser.isAdmin || currentUser.isAuthor) && (
+              <Link to='/dashboard?tab=comments'>
+                <Sidebar.Item active={tab === 'comments'} icon={HiAnnotation} as='div'>
+                  Bình luận
                 </Sidebar.Item>
               </Link>
             )}
@@ -66,19 +74,14 @@ function DashSidebar() {
               <>
                 <Link to='/dashboard?tab=users'>
                   <Sidebar.Item active={tab === 'users'} icon={HiOutlineUserGroup} as='div'>
-                    Users
-                  </Sidebar.Item>
-                </Link>
-                <Link to='/dashboard?tab=comments'>
-                  <Sidebar.Item active={tab === 'users'} icon={HiAnnotation} as='div'>
-                    Comments
+                    Người dùng
                   </Sidebar.Item>
                 </Link>
               </>
             )}
             
             <Sidebar.Item icon={HiArrowRight} className="cursor-pointer" onClick={handleSignout}>
-                Sign out
+                Đăng xuất
             </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>

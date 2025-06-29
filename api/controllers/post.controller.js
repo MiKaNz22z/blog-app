@@ -2,7 +2,7 @@ import Post from '../models/post.model.js';
 import { errorHandle } from '../utils/error.js';
 
 export const create = async (req, res, next) => {
-  if (!req.user.isAdmin) {
+  if (!req.user.isAdmin && !req.user.isAuthor) {
     return next(errorHandle(403, 'You are not allowed to create a post'));
   }
   if (!req.body.title || !req.body.content) {
@@ -38,8 +38,7 @@ export const getposts = async (req, res, next) => {
       ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.searchTerm && {
         $or: [
-          { title: { $regex: req.query.searchTerm, $options: 'i' } },
-          { content: { $regex: req.query.searchTerm, $options: 'i' } },
+          { title: { $regex: req.query.searchTerm, $options: 'i' } }
         ],
       }),
     })
@@ -72,8 +71,11 @@ export const getposts = async (req, res, next) => {
 };
 
 export const deletepost = async (req, res, next) => {
-  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+  if (!req.user.isAdmin && !req.user.isAuthor) {
     return next(errorHandle(403, 'You are not allowed to delete this post'));
+  }
+  if (!req.user.isAdmin && req.user.id !== req.params.userId) {
+    return next(errorHandle(403, 'You can only delete your own posts'));
   }
   try {
     await Post.findByIdAndDelete(req.params.postId);
@@ -84,8 +86,11 @@ export const deletepost = async (req, res, next) => {
 };
 
 export const updatepost = async (req, res, next) => {
-  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+  if (!req.user.isAdmin && !req.user.isAuthor) {
     return next(errorHandle(403, 'You are not allowed to update this post'));
+  }
+  if (!req.user.isAdmin && req.user.id !== req.params.userId) {
+    return next(errorHandle(403, 'You can only update your own posts'));
   }
   try {
     const updatedPost = await Post.findByIdAndUpdate(

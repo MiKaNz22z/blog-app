@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function CardSearch({ post }) {
   return (
-    <div className='group relative w-full border  hover:border-2 h-[400px] overflow-hidden sm:w-[430px] transition-all'>
+    <div className='group relative w-[420px] border hover:border-2 h-[400px] overflow-hidden transition-all'>
       <Link to={`/post/${post.slug}`}>
         <img
           src={post.image}
@@ -17,7 +17,7 @@ export default function CardSearch({ post }) {
           to={`/post/${post.slug}`}
           className='z-10 group-hover:bottom-0 absolute bottom-[-200px] left-0 right-0 border border-black text-black hover:bg-black hover:text-white transition-all duration-300 text-center py-2 rounded-md !rounded-tl-none m-2'
         >
-          Read article
+          Đọc bài viết
         </Link>
       </div>
     </div>

@@ -27,10 +27,16 @@ function DashProfile() {
   
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if(file) {
+    if (file) {
+      if (file.size > 4 * 1024 * 1024) { // 4MB
+        setImageFileUploadError('Dung lượng ảnh tối đa là 4MB');
+        setImageFile(null);
+        setImageFileUrl(null);
+        return;
+      }
       setImageFile(file);
-      setImageFileUrl(URL.createObjectURL(file))
-    } 
+      setImageFileUrl(URL.createObjectURL(file));
+    }
   }
 
   useEffect(() => {
@@ -152,24 +158,17 @@ function DashProfile() {
   }
 
   return (
-    <div className='max-w-lg mx-auto p-3 w-full'>
-      <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input type="file" accept='image/*' onChange={handleImageChange} ref={filePickerRef} hidden/>
-        <div
-          className="relative w-32 h-32 min-w-32 min-h-32 aspect-square self-center cursor-pointer shadow-md overflow-hidden rounded-full bg-gray-200"
-          onClick={() => filePickerRef.current.click()}
-        >
+    <div className="max-w-6xl w-4/5 mx-auto p-6 mt-[60px] bg-white rounded-lg shadow flex flex-col md:flex-row gap-8">
+      {/* Left: Avatar & Change Password */}
+      <div className="md:w-1/3 flex flex-col items-center gap-6 border-b md:border-b-0 md:border-r pb-8 md:pb-0 md:pr-[40px] border-gray-200">
+        <div className="relative w-[200px] h-[200px] aspect-square cursor-pointer shadow-md overflow-hidden rounded-full bg-gray-200">
+          <input type="file" accept="image/*" onChange={handleImageChange} ref={filePickerRef} hidden />
           <img
             src={imageFileUrl || currentUser.profilePicture}
             alt="user"
-            className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
-              imageFileUploadProgress &&
-              imageFileUploadProgress < 100 &&
-              'opacity-60'
-            }`}
+            className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${imageFileUploadProgress && imageFileUploadProgress < 100 && 'opacity-60'}`}
+            onClick={() => filePickerRef.current.click()}
           />
-          
           {imageFileUploadProgress && (
             <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
               <CircularProgressbar
@@ -177,73 +176,62 @@ function DashProfile() {
                 text={`${imageFileUploadProgress}%`}
                 strokeWidth={5}
                 styles={{
-                  root: {
-                    width: '100%', // Đảm bảo thanh tiến trình không chiếm toàn bộ khung hình
-                    height: '100%',
-                  },
-                  path: {
-                    stroke: `rgba(62, 152, 199, ${imageFileUploadProgress / 100})`,
-                  },
+                  root: { width: '100%', height: '100%' },
+                  path: { stroke: `rgba(62, 152, 199, ${imageFileUploadProgress / 100})` },
                 }}
               />
             </div>
           )}
         </div>
-
-
-        { 
-          imageFileUploadError && <Alert color='failure'>
-            {imageFileUploadError}
-          </Alert>
-        }
-
-        <TextInput type='text' id='username' placeholder='Username' defaultValue={currentUser.username} onChange={handleChange}/>
-        <TextInput type='email' id='email' placeholder='Email' defaultValue={currentUser.email} onChange={handleChange}/>
-        <TextInput type='password' id='password' placeholder='Password' onChange={handleChange}/>
-
-        <Button type='submit' gradientDuoTone="pinkToOrange" outline disabled={ loading || imageFileUploading }>{loading ? 'Loading...' : 'Update'}</Button>
-        {
-          currentUser.isAdmin && (
-            <Link to={'/create-post'}>
-              <Button
-                type='button'
-                gradientDuoTone='pinkToOrange'
-                className='w-full'
-              >
-                Create a post
-              </Button>
-            </Link>
-          )
-        }
-      </form>
-      <div className="text-red-500 flex justify-between mt-5">
-        <span onClick={() => setShowModal(true)} className='cursor-pointer'>Delete Account</span>
-        <span onClick={handleSignout} className='cursor-pointer'>Sign out</span>
+        <Button type="button" outline gradientDuoTone="pinkToOrange" onClick={() => filePickerRef.current.click()} className="w-full">Chọn ảnh</Button>
+        {imageFileUploadError && <Alert color='failure' className="w-full">{imageFileUploadError}</Alert>}
+        {/* Change Password */}
+        <div className="w-full flex flex-col gap-2 mt-4">
+          <label className="font-semibold">Old Password</label>
+          <TextInput type="password" id="oldPassword" placeholder="********" onChange={handleChange} />
+          <label className="font-semibold">New Password</label>
+          <TextInput type="password" id="password" placeholder="********" onChange={handleChange} />
+        </div>
       </div>
-      {updateUserSuccess && (
-        <Alert color='success' className='mt-5'>
-          {updateUserSuccess}
-        </Alert>
-      )}
-      {updateUserError && (
-        <Alert color='failure' className='mt-5'>
-          {updateUserError}
-        </Alert>
-      )}
-      {error && (
-        <Alert color='failure' className='mt-5'>
-          {error}
-        </Alert>
-      )}
+      {/* Right: Profile Info */}
+      <form onSubmit={handleSubmit} className="md:w-2/3 flex flex-col gap-6">
+        <h1 className="text-3xl font-semibold mb-2">Thông tin tài khoản</h1>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <label className="font-semibold">Tên người dùng</label>
+              <TextInput type='text' id='username' placeholder='Username' defaultValue={currentUser.username} onChange={handleChange}/>
+            </div>
+            <div className="flex-1">
+              <label className="font-semibold">Email</label>
+              <TextInput type='email' id='email' placeholder='Email' defaultValue={currentUser.email} onChange={handleChange}/>
+            </div>
+          </div>
+        </div>
+        <Button type='submit' gradientDuoTone="pinkToOrange" outline disabled={loading || imageFileUploading}>{loading ? 'Đang tải...' : 'Cập nhật'}</Button>
+        {(currentUser.isAdmin || currentUser.isAuthor) && (
+          <Link to={'/create-post'}>
+            <Button type='button' gradientDuoTone='pinkToOrange' className='w-full'>Tạo bài viết</Button>
+          </Link>
+        )}
+        {updateUserSuccess && <Alert color='success'>{updateUserSuccess}</Alert>}
+        {updateUserError && <Alert color='failure'>{updateUserError}</Alert>}
+        {error && <Alert color='failure'>{error}</Alert>}
+        <div className="flex justify-between mt-4 text-red-500">
+          <span onClick={() => setShowModal(true)} className='cursor-pointer'>Xóa tài khoản</span>
+          <span onClick={handleSignout} className='cursor-pointer'>Đăng xuất</span>
+        </div>
+      </form>
+      {/* Modal giữ nguyên */}
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
             <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto'/>
-            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Are you sure to delete your account ?</h3>
+            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Bạn có chắc muốn xóa tài khoản này  ?</h3>
             <div className="flex justify-between gap-4">
-              <Button color='failure' onClick={handleDeleteUser}>Yes, I'm sure</Button>
-              <Button color='gray' onClick={() => setShowModal(false)}>No, cancel</Button>
+              <Button color='failure' onClick={handleDeleteUser}>Có, tôi chắc</Button>
+              <Button color='gray' onClick={() => setShowModal(false)}>Không, hủy</Button>
             </div>
           </div>
         </Modal.Body>

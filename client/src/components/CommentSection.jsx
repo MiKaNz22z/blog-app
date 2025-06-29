@@ -16,9 +16,6 @@ function CommentSection({postId}) {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (comment.length > 200) {
-          return;
-        }
         try {
           const res = await fetch('/api/comment/create', {
             method: 'POST',
@@ -114,12 +111,35 @@ function CommentSection({postId}) {
         }
     }
 
+    const handleReply = async (commentId, replyData) => {
+        setComments(prevComments => {
+            const updateCommentReplies = (comments) => {
+                return comments.map(comment => {
+                    if (comment._id === commentId) {
+                        return {
+                            ...comment,
+                            replies: [replyData, ...(comment.replies || [])]
+                        };
+                    }
+                    if (comment.replies) {
+                        return {
+                            ...comment,
+                            replies: updateCommentReplies(comment.replies)
+                        };
+                    }
+                    return comment;
+                });
+            };
+            return updateCommentReplies(prevComments);
+        });
+    };
+
   return (
     <div className='max-w-4xl mx-auto w-full'>
         {currentUser ? 
         (
             <div className="flex items-center gap-1 my-5 text-gray-500 text-md">
-                <p>Signed in as:</p>
+                <p>Đăng nhập với:</p>
                 <img className='h-5 w-5 object-cover rounded-full' src={currentUser.profilePicture} alt="" />
                 <Link to={'/dashboard?tab=profile'} className='text-sm text-blue-700 hover:underline'>
                     @{currentUser.username}
@@ -127,9 +147,9 @@ function CommentSection({postId}) {
             </div>
         ) : (
             <div className="text-md text-black my-5 flex gap-1">
-                You must be signed  in to comment.
+                Bạn phải đăng nhập để được bình luận.
                 <Link className='text-blue-700 hover:underline' to={'/sign-in'}>
-                    Sign In
+                    Đăng nhập
                 </Link>
             </div>
         )}
@@ -137,27 +157,21 @@ function CommentSection({postId}) {
         {currentUser && (
             <form onSubmit={handleSubmit} className=''>
                 <Textarea
-                    placeholder='Add a comment...'
+                    placeholder='Thêm bình luận...'
                     rows='3'
-                    maxLength='200'
                     onChange={(e) => setComment(e.target.value)}
                     value={comment}
                     className='rounded-none h-60 focus:bg-white p-5'
                 />
-                <div className="flex justify-between items-center mt-5 gap-4
+                <div className="flex justify-end items-center mt-5 gap-4
                     max-semi-sm:flex-col max-semi-sm:items-start
                 ">
-                    <p className='text-gray-500 text-md'>{200 - comment.length} characters remaining</p>
-                    {/* <Button outline gradientDuoTone='pinkToOrange' type='submit'>
-                        Submit
-                    </Button> */}
-
                     <button className='p-3 font-semibold w-40 border text-black border-black 
                         hover:bg-black hover:text-white transition-all
                         max-semi-sm:w-full' 
                         type='submit'
                     >
-                        Submit
+                        Gửi
                     </button>
                 </div>
                 { commentError && (
@@ -165,14 +179,14 @@ function CommentSection({postId}) {
                         {commentError}
                     </Alert>
                 )}
-            </form>    
+            </form>
         )}
         {comments.length === 0 ? (
-            <p className='text-sm my-5'>No comments yet!</p>
+            <p className='text-sm my-5'>Chưa có bình luận nào!</p>
         ) : (
             <>
                 <div className="text-sm my-5 flex items-center gap-1">
-                    <p>Comments</p>
+                    <p>Số lượng bình luận</p>
                     <div className="border border-gray-400 py-1 px-2 rounded-sm">
                         <p>{comments.length}</p>
                     </div>
@@ -187,6 +201,8 @@ function CommentSection({postId}) {
                             setShowModal(true);
                             setCommentToDelete(commentId);
                         }}
+                        onReply={handleReply}
+                        replies={comment.replies || []}
                     />
                 ))}
             </>
@@ -197,10 +213,10 @@ function CommentSection({postId}) {
             <Modal.Body>
             <div className="text-center">
                 <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto'/>
-                <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Are you sure to delete this comment ?</h3>
+                <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Bạn có chắc muốn xóa bình luận này ?</h3>
                 <div className="flex justify-between gap-4">
-                <Button color='failure' onClick={() => handleDelete(commentToDelete)}>Yes, I'm sure</Button>
-                <Button color='gray' onClick={() => setShowModal(false)}>No, cancel</Button>
+                <Button color='failure' onClick={() => handleDelete(commentToDelete)}>Có, tôi chắc</Button>
+                <Button color='gray' onClick={() => setShowModal(false)}>Không, hủy</Button>
                 </div>
             </div>
             </Modal.Body>

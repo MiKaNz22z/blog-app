@@ -34,7 +34,7 @@ function CreatePost() {
           setImageUploadProgress(progress.toFixed(0));
         },
         (error) => {
-          setImageUploadError("Could not upload image (File must be less than 2MB)");
+          setImageUploadError("Could not upload image (File must be less than 4MB)");
           setImageUploadProgress(null);
         },
         () => {
@@ -77,7 +77,7 @@ function CreatePost() {
 
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
-      <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
+      <h1 className="text-center text-3xl my-7 font-semibold">Tạo bài viết</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
             <TextInput 
@@ -119,11 +119,20 @@ function CreatePost() {
         <ReactQuill 
           required
           theme="snow" 
-          placeholder="Write something..." 
+          placeholder="Nhập nội dung bài viết..." 
           className="h-72 mb-12" 
           onChange={(value) => setFormData({...formData, content: value})}
+          modules={{
+            toolbar: [
+              [{ 'header': [1, 2, 3, 4, false] }],
+              ['bold', 'italic', 'underline', 'strike'],
+              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+              ['link', 'image'],
+              ['clean']
+            ]
+          }}
         />
-        <Button type='submit' gradientDuoTone='pinkToOrange'>Publish</Button>
+        <Button type='submit' gradientDuoTone='pinkToOrange'>Đăng</Button>
         {publlishError && <Alert className="mt-5" color='failure'>{publlishError}</Alert>}
       </form>
     </div>

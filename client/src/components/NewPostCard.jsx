@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function NewPostCard({ post }) {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const res = await fetch(`/api/user/${post.userId}`);
+        const data = await res.json();
+        if (res.ok) {
+          setUsername(data.username);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchUsername();
+  }, [post.userId]);
+
   // Kiểm tra nếu post không tồn tại
   if (!post) {
     return <div>No post data available.</div>;
@@ -36,9 +53,9 @@ export default function NewPostCard({ post }) {
           </h2>
         </Link>
         <div className="py-1">
-          <span className='text-gray-500 text-xs mr-2'>Admin</span>
+          <Link to={`/author?authorId=${post.userId}`} className='text-gray-500 text-xs mr-2 uppercase hover:text-gray-700'>{username || 'Loading...'}</Link>
           <span className='text-gray-500 text-xs'>
-            {post && new Date(post.createdAt).toLocaleDateString('en-US', {
+            {post && new Date(post.updatedAt).toLocaleDateString('en-US', {
               month: 'long',
               day: 'numeric',
               year: 'numeric',

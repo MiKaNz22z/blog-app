@@ -77,7 +77,7 @@ function Header() {
     }, []);
   return (
     <div className="mb-5 max-md:shadow-lg">
-      <Navbar className="flex items-center justify-between mt-2 max-md:max-w-4xl">
+      <Navbar className="flex items-center justify-between max-md:max-w-4xl">
         <form className="relative flex-1 max-md:hidden " ref={searchContainerRef} onSubmit={handleSubmit}>
 
           <div onClick={handleSearchClick} className="cursor-pointer max-md:hidden">
@@ -101,7 +101,7 @@ function Header() {
 
         <Link to="/" className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white">
           <img 
-            src="https://websitedemos.net/business-blog-04/wp-content/uploads/sites/895/2021/06/business-blog-site-logo.svg" 
+            src="https://websitedemos.net/business-blog-04/wp-content/uploads/sites/895/2021/06/business-blog-site-logo.svg"
             alt="" 
             className="mx-auto" 
           />
@@ -118,18 +118,17 @@ function Header() {
               }>
                 <Dropdown.Item>
                   <span className="block text-sm">@{currentUser.username}</span>
-                  <span className="block text-sm font-medium truncate">{currentUser.email}</span>
                 </Dropdown.Item>
                 <Link to={'/dashboard?tab=profile'}>
-                  <Dropdown.Item>Profile</Dropdown.Item>
+                  <Dropdown.Item>Thông tin tài khoản</Dropdown.Item>
                 </Link>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleSignout}>Sign out</Dropdown.Item>
+                <Dropdown.Item onClick={handleSignout}>Đăng xuất</Dropdown.Item>
               </Dropdown>
             ) :
             (<Link to="sign-in">
               <button className='px-10 py-2 border text-black border-black font-semibold hover:bg-black hover:text-white transition-all max-[830px]:hidden'>
-                Sign in
+                Đăng nhập
               </button>
             </Link>)
           }
@@ -169,11 +168,11 @@ function Header() {
               <Link to='/category?category=uncategorized' className='px-2 text-[16px] hover:text-black'>Uncategorized</Link>
             </Navbar.Link>
             {currentUser ? (
-              <div className="">Hello</div>
+              <div className=""></div>
             ) : (
               <Link to="sign-in">
               <button className='mt-5 w-full px-10 py-2 border text-black border-black font-semibold hover:bg-black hover:text-white transition-all'>
-                Sign in
+                Đăng nhập
               </button>
             </Link>
             )}

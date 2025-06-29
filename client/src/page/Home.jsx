@@ -84,10 +84,10 @@ export default function Home() {
             <img src="https://websitedemos.net/business-blog-04/wp-content/uploads/sites/895/2021/07/business-blog-wide-promo-banner.jpg" alt="" />
           </div>
           <div className="bg-white p-6 shadow-md w-[40%] max-md:w-full">
-            <h2 className='text-xl font-bold mb-3  text-black'>Subscribe To Our Newsletter</h2>
-            <p className='text-md text-gray-700 mb-16'>Egestas eu molestie lacus, rhoncus, gravida aliquet sociis vulputate faucibus tristique odio</p>
+            <h2 className='text-md font-bold mb-3  text-black'>CÁC BÀI VIẾT NỔI BẬT BẠN KHÔNG NÊN BỎ LỠ!</h2>
+            <p className='text-md text-gray-700 mb-16'>Chúng tôi sẽ gửi bạn email tổng hợp những bài viết đáng đọc nhất tuần qua.</p>
             <button className='p-3 w-full border text-black border-black hover:bg-black hover:text-white transition-all'>
-              <Link to='sign-in' className='font-semibold'>Subscribe</Link>
+              <Link to='sign-in' className='font-semibold'>Đăng ký!</Link>
             </button>
           </div>
         </div>
@@ -97,7 +97,7 @@ export default function Home() {
         <div className="flex justify-between mb-8">
           <h2 className='text-4xl font-semibold text-black'>Thể thao</h2>
           <Link to='/category?category=thethao' className='flex justify-center items-center relative gap-2 font-semibold'>
-            <p className='text-lg text-black'>View all</p> 
+            <p className='text-lg text-black'>Xem thêm</p> 
             <FaArrowRightToBracket className='' style={{ color: 'black' }}/>
           </Link>
         </div>
@@ -120,7 +120,7 @@ export default function Home() {
         <div className="flex justify-between mb-8">
           <h2 className='text-4xl font-semibold text-black'>Đời sống</h2>
           <Link to='/category?category=doisong' className='flex justify-center items-center relative gap-2 font-semibold'>
-            <p className='text-lg text-black'>View all</p> 
+            <p className='text-lg text-black'>Xem thêm</p> 
             <FaArrowRightToBracket className='' style={{ color: 'black' }}/>
           </Link>
         </div>
@@ -140,7 +140,7 @@ export default function Home() {
         <div className="flex justify-between mb-8">
           <h2 className='text-4xl font-semibold text-black'>Xã hội</h2>
           <Link to='/category?category=xahoi' className='flex justify-center items-center relative gap-2 font-semibold'>
-            <p className='text-lg text-black'>View all</p> 
+            <p className='text-lg text-black'>Xem thêm</p> 
             <FaArrowRightToBracket className='' style={{ color: 'black' }}/>
           </Link>
         </div>
@@ -165,7 +165,7 @@ export default function Home() {
           <div className="flex justify-between mb-8">
             <h2 className='text-4xl font-semibold text-black'>Game</h2>
             <Link to='/category?category=game' className='flex justify-center items-center relative gap-2 font-semibold'>
-              <p className='text-lg text-black'>View all</p> 
+              <p className='text-lg text-black'>Xem thêm</p> 
               <FaArrowRightToBracket className='' style={{ color: 'black' }}/>
             </Link>
           </div>
@@ -198,7 +198,7 @@ export default function Home() {
           <div className="flex justify-between mb-8">
             <h2 className='text-4xl font-semibold text-black'>Sức khỏe</h2>
             <Link to='/category?category=suckhoe' className='flex justify-center items-center relative gap-2 font-semibold'>
-              <p className='text-lg text-black'>View all</p> 
+              <p className='text-lg text-black'>Xem thêm</p> 
               <FaArrowRightToBracket className='' style={{ color: 'black' }}/>
             </Link>
           </div>
@@ -229,7 +229,7 @@ export default function Home() {
         <div className="flex justify-between mb-8">
           <h2 className='text-4xl font-semibold text-black'>Công nghệ</h2>
           <Link to='/category?category=congnghe' className='flex justify-center items-center relative gap-2 font-semibold'>
-            <p className='text-lg text-black'>View all</p> 
+            <p className='text-lg text-black'>Xem thêm</p> 
             <FaArrowRightToBracket className='' style={{ color: 'black' }}/>
           </Link>
         </div>
@@ -258,7 +258,7 @@ export default function Home() {
 //       to='/search'
 //       className='text-xs sm:text-sm text-teal-500 font-bold hover:underline'
 //     >
-//       View all posts
+//       Xem thêm posts
 //     </Link>
 //   </div>
 //   <div className='p-3 bg-amber-100 dark:bg-slate-700'>
@@ -278,7 +278,7 @@ export default function Home() {
 //           to={'/search'}
 //           className='text-lg text-teal-500 hover:underline text-center'
 //         >
-//           View all posts
+//           Xem thêm posts
 //         </Link>
 //       </div>
 //     )}

@@ -18,14 +18,12 @@ export const updateUser = async (req, res, next) => {
     }
 
     if(req.body.username) {
-        if(req.body.username < 7 || req.body.username > 20) {
-            return next(errorHandle(400, 'Username must be between 7 and 20 characters'));
+        if(req.body.username.length < 3 || req.body.username.length > 30) {
+            return next(errorHandle(400, 'Username must be between 3 and 30 characters'));
         }
-        if(req.body.username.includes(' ')){
-            return next(errorHandle(400, 'Username cannot contain spaces'));
-        }
-        if(!req.body.username.match(/^[a-zA-Z0-9]+$/)){
-            return next(errorHandle(400, 'Username can only contain letter and numbers'));
+        // Allow Vietnamese characters, spaces and common special characters
+        if(!req.body.username.match(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵýỷỹ0-9\s]+$/)){
+            return next(errorHandle(400, 'Username can only contain letters, numbers, spaces and Vietnamese characters'));
         }
     }
     try {
@@ -113,6 +111,27 @@ export const getUser = async (req, res, next) =>{
             return next(errorHandle(404, 'User not found'));
         }
         const { password, ...rest } = user._doc;
+        res.status(200).json(rest);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const updateUserRole = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+        return next(errorHandle(403, 'You are not allowed to update user roles'));
+    }
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.userId,
+            {
+                $set: {
+                    isAuthor: req.body.isAuthor,
+                }
+            },
+            { new: true }
+        );
+        const { password, ...rest } = updatedUser._doc;
         res.status(200).json(rest);
     } catch (error) {
         next(error);

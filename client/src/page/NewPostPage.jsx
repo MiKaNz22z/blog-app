@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Spinner } from 'flowbite-react'
 import CommentSection from "../components/CommentSection";
+import { FaUserCircle } from "react-icons/fa";
+import { FaRegCalendarAlt } from "react-icons/fa";
 
 function NewPostPage() {
     const { postSlug } = useParams();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [post, setPost] = useState(null);
-    const [recentPosts, setRecentPosts] = useState(null);  
+    const [recentPosts, setRecentPosts] = useState(null);
+    const [username, setUsername] = useState('');
+    const [sameCategoryPosts, setSameCategoryPosts] = useState([]);
     
     const shuffleArray = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
@@ -33,6 +37,22 @@ function NewPostPage() {
                 }
                 if(res.ok) {
                     setPost(data.posts[0]);
+                    // Fetch username for the post author
+                    const userRes = await fetch(`/api/user/${data.posts[0].userId}`);
+                    const userData = await userRes.json();
+                    if (userRes.ok) {
+                        setUsername(userData.username);
+                    }
+                    // Fetch posts with same category
+                    const categoryRes = await fetch(`/api/post/getposts?category=${data.posts[0].category}`);
+                    const categoryData = await categoryRes.json();
+                    if (categoryRes.ok) {
+                        // Filter out the current post and get up to 3 other posts
+                        const filteredPosts = categoryData.posts
+                            .filter(p => p._id !== data.posts[0]._id)
+                            .slice(0, 3);
+                        setSameCategoryPosts(filteredPosts);
+                    }
                     setLoading(false);
                     setError(false);
                 }
@@ -73,12 +93,17 @@ function NewPostPage() {
             <div className="">
                 <img src={post && post.image} className='w-full' alt="" />
                 <h1 className='text-2xl text-black font-semibold pt-2'>{post && post.title}</h1>
-                <div class="flex items-center text-blue-700 mt-2">
-                    <span class="after:content-['/'] after:mx-2">Leave a Comment</span>
-                    <Link to={`/search?category=${post && post.category}`} className="self-center">
-                        <span class="after:content-['/'] after:mx-2">{post && post.category}</span>
-                    </Link>
-                    <span>By Admin</span>
+                <div className="flex items-center gap-10 mt-4">
+                    <div className="flex gap-1 items-center">
+                        <FaUserCircle className='text-xl'/>
+                        <p>Tác giả:</p>
+                        <Link to={`/author?authorId=${post.userId}`} className='font-bold'>{username || 'Loading...'}</Link>
+                    </div>
+                    <div className="flex gap-1 items-center">
+                        <FaRegCalendarAlt className='text-xl'/>
+                        <p>Ngày cập nhật:</p>
+                        <span>{post && new Date(post.updatedAt).toLocaleDateString()}</span>
+                    </div>
                 </div>
             </div>
 
@@ -90,7 +115,7 @@ function NewPostPage() {
             max-md:mx-5 max-md:px-10 max-md:py-8
             max-semi-sm:p-5
         ">
-            <h1 className='text-3xl text-black font-semibold'>Must Read</h1>
+            <h1 className='text-3xl text-black font-semibold'>Nên đọc</h1>
             <div className="grid grid-cols-2 gap-6 pt-6 max-semi-sm:grid-cols-1">
                 {recentPosts && 
                     shuffleArray([...recentPosts])
@@ -100,12 +125,27 @@ function NewPostPage() {
             </div>
         </div>
 
+        {sameCategoryPosts.length > 0 && (
+            <div className="bg-white max-w-5xl mx-auto mt-16 px-10 py-14
+                max-semi-lg:max-w-4xl
+                max-md:mx-5 max-md:px-10 max-md:py-8
+                max-semi-sm:p-5
+            ">
+                <h1 className='text-3xl text-black font-semibold'>Có liên quan tới {post?.category}</h1>
+                <div className="grid grid-cols-3 gap-6 pt-6 max-semi-sm:grid-cols-1">
+                    {sameCategoryPosts.map((post) => (
+                        <NewPostCard key={post._id} post={post} />
+                    ))}
+                </div>
+            </div>
+        )}
+
         <div className="bg-white max-w-5xl mx-auto mt-16 px-20 py-20
             max-semi-lg:max-w-4xl
             max-md:mx-5 max-md:px-10 max-md:py-8
             max-semi-sm:p-5
         ">
-            <h1 className='text-2xl text-black font-semibold pt-2'>Leave a Comment</h1>
+            <h1 className='text-2xl text-black font-semibold pt-2'>Để lại bình luận</h1>
             <CommentSection postId={post._id}/>
         </div>
         

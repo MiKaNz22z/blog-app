@@ -3,12 +3,14 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import OAuth from "../components/OAuth";
 import { FaEnvelope } from "react-icons/fa6";
-import { FaLock } from "react-icons/fa6";
+import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa6";
 import { FaCircleUser } from "react-icons/fa6";
 
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessages] = useState(null);
   const [loading, setLoading] = useState(false);
   const nagative = useNavigate();
@@ -19,8 +21,11 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!formData.username || !formData.email || !formData.password) {
-      return setErrorMessages("Please fill out all fields.");
+    if(!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+      return setErrorMessages("Vui lòng điền đầy đủ thông tin.");
+    }
+    if(formData.password !== formData.confirmPassword) {
+      return setErrorMessages("Mật khẩu xác nhận không khớp.");
     }
     try {
       setLoading(true);
@@ -62,7 +67,7 @@ export default function SignUp() {
         </div>
         {/* right */}
         <div className="flex-1">
-          <h2 className="text-3xl text-center font-bold uppercase text-black">Sign up</h2>
+          <h2 className="text-3xl text-center font-bold uppercase text-black">Đăng ký</h2>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="relative">
               <input 
@@ -97,30 +102,60 @@ export default function SignUp() {
 
             <div className="relative mb-4">
               <input 
-                type="password" 
+                type={showPassword ? "text" : "password"}
                 className=" w-full px-3 py-2 border-0 border-b-2 placeholder:text-gray-600 border-gray-600 focus:outline-none focus:border-gray-600 focus:no-ring"
-                placeholder="*********" 
+                placeholder="Mật khẩu" 
                 id='password'
                 onChange={handleChange}
               />
-              <FaLock className="absolute right-2 top-[40%]"/>
+              <div className="absolute right-2 top-[40%] flex items-center gap-2">
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-600 hover:text-gray-800"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+                <FaLock />
+              </div>
             </div>
+
+            <div className="relative mb-4">
+              <input 
+                type={showConfirmPassword ? "text" : "password"}
+                className=" w-full px-3 py-2 border-0 border-b-2 placeholder:text-gray-600 border-gray-600 focus:outline-none focus:border-gray-600 focus:no-ring"
+                placeholder="Xác nhận mật khẩu" 
+                id='confirmPassword'
+                onChange={handleChange}
+              />
+              <div className="absolute right-2 top-[40%] flex items-center gap-2">
+                <button 
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="text-gray-600 hover:text-gray-800"
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+                <FaLock />
+              </div>
+            </div>
+
             <button className='mt-4 px-10 py-3 border text-black border-black font-semibold hover:bg-black hover:text-white transition-all' type="submit" disabled={loading}>
               {
                 loading ? (
                   <>
                     <Spinner size='sm'/>
-                    <span className="pl-3">Loading ...</span>
+                    <span className="pl-3">Đang tải ...</span>
                   </>
-                ) : "Sign up"
+                ) : "Đăng ký"
               }
             </button>
 
             <OAuth/>
           </form>
           <div className="flex gap-2 text-sm mt-5">
-            <span>Have an account?</span>
-            <Link to="/sign-in" className="text-blue-500">Sign In</Link>
+            <span>Bạn đã có tài khoản?</span>
+            <Link to="/sign-in" className="text-blue-500">Đăng nhập</Link>
           </div>
 
           { errorMessage && (

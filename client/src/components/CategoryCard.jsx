@@ -6,12 +6,12 @@ function CategoryCard({ post }) {
   return (
     <div>
       <div className="">
-        <img src={post.image} alt="" />
+        <img className='w-full h-[450px] object-cover' src={post.image} alt="" />
         <h1 className='text-2xl font-bold mt-5 mb-2'>{post.title}</h1>
         <p className='text-md text-blue-700 mb-2'>{post.category}</p>
         <div dangerouslySetInnerHTML={{ __html: post.content }} className='content text-gray-700'></div>
         <div className="mt-5 my-10">
-            <Link to={`/post/${post.slug}`} className='text-md text-blue-700'>Read More...</Link>
+            <Link to={`/post/${post.slug}`} className='text-md text-blue-700'>Đọc thêm...</Link>
         </div>
       </div>
 

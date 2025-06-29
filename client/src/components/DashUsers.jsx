@@ -1,8 +1,8 @@
-import { Table, Button, Modal } from "flowbite-react";
+import { Table, Button, Modal, ToggleSwitch, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react"
 import { useSelector } from 'react-redux'
 import { Link } from "react-router-dom";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { HiOutlineExclamationCircle, HiSearch } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
 function DashUsers() {
@@ -11,6 +11,8 @@ function DashUsers() {
   const [showMore, setShowMore] = useState(true);
   const [ showModal, setShowModal ] = useState(false);
   const [ userIdToDelete, setUserIdToDelete ] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showAll, setShowAll] = useState(false);
   
   useEffect(() => {
     const fetchUsers = async () => {
@@ -51,6 +53,28 @@ function DashUsers() {
     }
   };
 
+  const handleAuthorRoleChange = async (userId, isAuthor) => {
+    try {
+      const res = await fetch(`/api/user/update-role/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isAuthor: !isAuthor }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUsers((prev) =>
+          prev.map((user) => (user._id === userId ? { ...user, isAuthor: !isAuthor } : user))
+        );
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const handleDeleteUser = async () => {
     try {
       const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
@@ -68,21 +92,41 @@ function DashUsers() {
     }
   }
 
+  // Lọc người dùng dựa trên từ khóa tìm kiếm
+  const filteredUsers = users.filter(user => 
+    user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Hiển thị tất cả hoặc chỉ 10 người dùng đầu tiên
+  const displayedUsers = showAll ? filteredUsers : filteredUsers.slice(0, 10);
   
   return (  
     <div className="w-full table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       {currentUser.isAdmin && users.length > 0 ? (
         <>
+          <div className="flex justify-end mb-4">
+            <TextInput
+              type="text"
+              placeholder="Tìm kiếm theo tên hoặc email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-96"
+              icon={HiSearch}
+            />
+          </div>
+
           <Table hoverable className="shadow-md">
             <Table.Head>
-              <Table.HeadCell>Date created</Table.HeadCell>
-              <Table.HeadCell>User image</Table.HeadCell>
-              <Table.HeadCell>Username</Table.HeadCell>
+              <Table.HeadCell>Ngày gia nhập</Table.HeadCell>
+              <Table.HeadCell>Ảnh đại diện</Table.HeadCell>
+              <Table.HeadCell>Tên người dùng</Table.HeadCell>
               <Table.HeadCell>Email</Table.HeadCell>
-              <Table.HeadCell>Admin</Table.HeadCell>
-              <Table.HeadCell>Delete</Table.HeadCell>
+              <Table.HeadCell>Tác giả</Table.HeadCell>
+              <Table.HeadCell>Cấp quyền</Table.HeadCell>
+              <Table.HeadCell>Xóa</Table.HeadCell>
             </Table.Head>
-            {users.map((user) => (
+            {displayedUsers.filter(user => !user.isAdmin).map((user) => (
               <Table.Body className="divide-y" key={user._id}>
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell>
@@ -98,7 +142,13 @@ function DashUsers() {
                     {user.email}
                   </Table.Cell>
                   <Table.Cell>
-                    {user.isAdmin ? (<FaCheck className="text-green-500"/>) : (<FaTimes className="text-red-500"/>) }
+                    {user.isAuthor ? (<FaCheck className="text-green-500"/>) : (<FaTimes className="text-red-500"/>) }
+                  </Table.Cell>
+                  <Table.Cell>
+                    <ToggleSwitch
+                      checked={user.isAuthor}
+                      onChange={() => handleAuthorRoleChange(user._id, user.isAuthor)}
+                    />
                   </Table.Cell>
                   <Table.Cell>
                     <span 
@@ -108,7 +158,7 @@ function DashUsers() {
                       }} 
                       className="font-medium text-red-500 hover:underline cursor-pointer"
                     >
-                      Delete
+                      Xóa
                     </span>
                   </Table.Cell>
                 </Table.Row>
@@ -116,16 +166,22 @@ function DashUsers() {
             ))}
           </Table>
 
-          {
-            showMore && (
-              <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7">
-                Show more
+          <div className="flex justify-center gap-4 mt-4">
+            {!showAll && showMore && (
+              <button onClick={handleShowMore} className="text-teal-500 hover:underline">
+                Xem thêm
               </button>
-            )
-          }
+            )}
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="text-teal-500 hover:underline"
+            >
+              {showAll ? 'Thu gọn' : 'Xem tất cả'}
+            </button>
+          </div>
         </>
       ) : (
-        <p> You have no users yet!</p>
+        <p> Hiện không có người dùng nào!</p>
       )}
 
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
@@ -133,10 +189,10 @@ function DashUsers() {
         <Modal.Body>
           <div className="text-center">
             <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto'/>
-            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Are you sure to delete this user ?</h3>
+            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Bạn có chắc muốn xóa người dùng này ?</h3>
             <div className="flex justify-between gap-4">
-              <Button color='failure' onClick={handleDeleteUser}>Yes, I'm sure</Button>
-              <Button color='gray' onClick={() => setShowModal(false)}>No, cancel</Button>
+              <Button color='failure' onClick={handleDeleteUser}>Có, tôi chắc</Button>
+              <Button color='gray' onClick={() => setShowModal(false)}>Không, hủy</Button>
             </div>
           </div>
         </Modal.Body>

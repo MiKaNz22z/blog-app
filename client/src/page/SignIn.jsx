@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
 import { FaEnvelope } from "react-icons/fa6";
-import { FaLock } from "react-icons/fa6";
+import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa6";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
   const { loading, error: errorMessage } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const nagative = useNavigate();
@@ -60,7 +61,7 @@ export default function SignIn() {
         </div>
         {/* right */}
         <div className="flex-1">
-          <h2 className="text-3xl text-center font-bold uppercase text-black mb-4">Sign in</h2>
+          <h2 className="text-3xl text-center font-bold uppercase text-black mb-4">Đăng nhập</h2>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             {/* <div className="">
               <Label value="Your email"></Label>
@@ -80,20 +81,29 @@ export default function SignIn() {
 
             <div className="relative mb-4">
               <input 
-                type="password" 
+                type={showPassword ? "text" : "password"}
                 className=" w-full px-3 py-2 border-0 border-b-2 placeholder:text-gray-600 border-gray-600 focus:outline-none focus:border-gray-600 focus:no-ring"
                 placeholder="*********" 
                 id='password'
                 onChange={handleChange}
               />
-              <FaLock className="absolute right-2 top-[40%]"/>
+              <div className="absolute right-2 top-[40%] flex items-center gap-2">
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-600 hover:text-gray-800"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+                <FaLock />
+              </div>
             </div>
             <button className='mt-4 px-10 py-3 border text-black border-black font-semibold hover:bg-black hover:text-white transition-all' type="submit" disabled={loading}>
               {
                 loading ? (
                   <>
                     <Spinner size='sm'/>
-                    <span className="pl-3">Loading ...</span>
+                    <span className="pl-3">Đang tải ...</span>
                   </>
                 ) : "Sign In"
               }
@@ -102,8 +112,8 @@ export default function SignIn() {
             <OAuth />
           </form>
           <div className="flex gap-2 text-sm mt-5">
-            <span>Don't have an account?</span>
-            <Link to="/sign-up" className="text-blue-500 hover:text-gray-800">Sign Up</Link>
+            <span>Bạn chưa có tài khoản ?</span>
+            <Link to="/sign-up" className="text-blue-500 hover:text-gray-800">Đăng ký</Link>
           </div>
 
           { errorMessage && (

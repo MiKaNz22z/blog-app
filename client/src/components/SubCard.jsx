@@ -15,7 +15,7 @@ export default function CardSearch({ post }) {
           <Link to={`/category?category=${post.category}`} className="bg-gray-700 text-white px-2 py-1 text-xs hover:text-black cursor-pointer">{post.category}</Link>
           <Link to={`/post/${post.slug}`}><h2 className="text-black font-semibold text-lg mt-2 line-clamp-3 text-ellipsis">{post.title}</h2></Link>
           <p className="text-xs text-gray-500 mt-2">
-            {post && new Date(post.createdAt).toLocaleDateString('en-US', {
+            {post && new Date(post.updatedAt).toLocaleDateString('en-US', {
               month: 'long',
               day: 'numeric',
               year: 'numeric',

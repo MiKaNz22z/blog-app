@@ -18,33 +18,52 @@ export default function UpdatePost() {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    category: 'uncategorized',
+    image: ''
+  });
   const [publishError, setPublishError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { postId } = useParams();
-
   const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
-    try {
       const fetchPost = async () => {
-        const res = await fetch(`/api/post/getposts?postId=${postId}`);
-        const data = await res.json();
-        if (!res.ok) {
-          console.log(data.message);
-          setPublishError(data.message);
+      try {
+        setLoading(true);
+        if (!postId) {
+          setPublishError('Post ID is missing');
+          setLoading(false);
           return;
         }
-        if (res.ok) {
-          setPublishError(null);
+
+        const res = await fetch(`/api/post/getposts?postId=${postId}`);
+        const data = await res.json();
+        
+        if (!res.ok) {
+          setPublishError(data.message || 'Failed to fetch post');
+          setLoading(false);
+          return;
+        }
+
+        if (data.posts && data.posts.length > 0) {
           setFormData(data.posts[0]);
+          setPublishError(null);
+        } else {
+          setPublishError('Post not found');
+        }
+      } catch (error) {
+        console.error('Error fetching post:', error);
+        setPublishError('Failed to fetch post');
+      } finally {
+        setLoading(false);
         }
       };
 
       fetchPost();
-    } catch (error) {
-      console.log(error.message);
-    }
   }, [postId]);
 
   const handleUpdloadImage = async () => {
@@ -83,10 +102,20 @@ export default function UpdatePost() {
       console.log(error);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
+      if (!postId) {
+        setPublishError('Post ID is missing');
+        return;
+      }
+      if (!currentUser?._id) {
+        setPublishError('User ID is missing');
+        return;
+      }
+
+      const res = await fetch(`/api/post/updatepost/${postId}/${currentUser._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -104,12 +133,22 @@ export default function UpdatePost() {
         navigate(`/post/${data.slug}`);
       }
     } catch (error) {
+      console.error('Error updating post:', error);
       setPublishError('Something went wrong');
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
-      <h1 className='text-center text-3xl my-7 font-semibold'>Update post</h1>
+      <h1 className='text-center text-3xl my-7 font-semibold'>Cập nhật bài viết</h1>
       <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
           <TextInput
@@ -121,13 +160,13 @@ export default function UpdatePost() {
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
-            value={formData.title}
+            value={formData.title || ''}
           />
           <Select
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
-            value={formData.category}
+            value={formData.category || 'uncategorized'}
           >
             <option value='uncategorized'>Uncategorized</option>
             <option value='game'>Game</option>
@@ -174,16 +213,25 @@ export default function UpdatePost() {
         )}
         <ReactQuill
           theme='snow'
-          value={formData.content}
+          value={formData.content || ''}
           placeholder='Write something...'
           className='h-72 mb-12'
           required
           onChange={(value) => {
             setFormData({ ...formData, content: value });
           }}
+          modules={{
+            toolbar: [
+              [{ 'header': [1, 2, 3, 4, false] }],
+              ['bold', 'italic', 'underline', 'strike'],
+              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+              ['link', 'image'],
+              ['clean']
+            ]
+          }}
         />
         <Button type='submit' gradientDuoTone='purpleToPink'>
-          Update post
+          Cập nhật
         </Button>
         {publishError && (
           <Alert className='mt-5' color='failure'>

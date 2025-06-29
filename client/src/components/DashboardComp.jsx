@@ -60,7 +60,7 @@ export default function DashboardComp() {
         console.log(error.message);
       }
     };
-    if (currentUser.isAdmin) {
+    if (currentUser.isAdmin || currentUser.isAuthor) {
       fetchUsers();
       fetchPosts();
       fetchComments();
@@ -72,7 +72,7 @@ export default function DashboardComp() {
         <div className='flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md'>
           <div className='flex justify-between'>
             <div className=''>
-              <h3 className='text-gray-500 text-md uppercase'>Total Users</h3>
+              <h3 className='text-gray-500 text-md uppercase'>Tổng số người dùng</h3>
               <p className='text-2xl'>{totalUsers}</p>
             </div>
             <HiOutlineUserGroup className='bg-teal-600  text-white rounded-full text-5xl p-3 shadow-lg' />
@@ -82,14 +82,14 @@ export default function DashboardComp() {
               <HiArrowNarrowUp />
               {lastMonthUsers}
             </span>
-            <div className='text-gray-500'>Last month</div>
+            <div className='text-gray-500'>Tháng gần nhất</div>
           </div>
         </div>
         <div className='flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md'>
           <div className='flex justify-between'>
             <div className=''>
               <h3 className='text-gray-500 text-md uppercase'>
-                Total Comments
+                Tổng số bình luận
               </h3>
               <p className='text-2xl'>{totalComments}</p>
             </div>
@@ -100,13 +100,13 @@ export default function DashboardComp() {
               <HiArrowNarrowUp />
               {lastMonthComments}
             </span>
-            <div className='text-gray-500'>Last month</div>
+            <div className='text-gray-500'>Tháng gần nhất</div>
           </div>
         </div>
         <div className='flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md'>
           <div className='flex justify-between'>
             <div className=''>
-              <h3 className='text-gray-500 text-md uppercase'>Total Posts</h3>
+              <h3 className='text-gray-500 text-md uppercase'>Tổng số bài viết</h3>
               <p className='text-2xl'>{totalPosts}</p>
             </div>
             <HiDocumentText className='bg-lime-600  text-white rounded-full text-5xl p-3 shadow-lg' />
@@ -116,22 +116,22 @@ export default function DashboardComp() {
               <HiArrowNarrowUp />
               {lastMonthPosts}
             </span>
-            <div className='text-gray-500'>Last month</div>
+            <div className='text-gray-500'>Tháng gần nhất</div>
           </div>
         </div>
       </div>
       <div className='flex flex-wrap gap-4 py-3 mx-auto justify-center max-w-screen-lg'>
         <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
-            <h1 className='text-center p-2'>Recent users</h1>
+            <h1 className='text-center p-2'>Người dùng gần đây</h1>
             <Button outline gradientDuoTone='purpleToPink'>
-              <Link to={'/dashboard?tab=users'}>See all</Link>
+              <Link to={'/dashboard?tab=users'}>Xem tất cả</Link>
             </Button>
           </div>
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell>User image</Table.HeadCell>
-              <Table.HeadCell>Username</Table.HeadCell>
+              <Table.HeadCell>Ảnh đại diên</Table.HeadCell>
+              <Table.HeadCell>Tên người dùng</Table.HeadCell>
             </Table.Head>
             {users &&
               users.map((user) => (
@@ -152,15 +152,15 @@ export default function DashboardComp() {
         </div>
         <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
-            <h1 className='text-center p-2'>Recent comments</h1>
+            <h1 className='text-center p-2'>Các bình luận gần đây</h1>
             <Button outline gradientDuoTone='purpleToPink'>
-              <Link to={'/dashboard?tab=comments'}>See all</Link>
+              <Link to={'/dashboard?tab=comments'}>Xem tất cả</Link>
             </Button>
           </div>
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell>Comment content</Table.HeadCell>
-              <Table.HeadCell>Likes</Table.HeadCell>
+              <Table.HeadCell>Nội dung bình luận</Table.HeadCell>
+              <Table.HeadCell>Số lượng like</Table.HeadCell>
             </Table.Head>
             {comments &&
               comments.map((comment) => (
@@ -178,19 +178,19 @@ export default function DashboardComp() {
 
         <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between p-3 text-sm font-semibold'>
-            <h1 className='text-center p-2'>Recent posts</h1>
+            <h1 className='text-center p-2'>Các bài viết gần đây</h1>
             <Button outline gradientDuoTone='purpleToPink'>
-              <Link to={'/dashboard?tab=posts'}>See all</Link>
+              <Link to={'/dashboard?tab=posts'}>Xem tất cả</Link>
             </Button>
           </div>
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell>Post image</Table.HeadCell>
-              <Table.HeadCell>Post Title</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
+              <Table.HeadCell>Ảnh bài viết</Table.HeadCell>
+              <Table.HeadCell>Tiêu đề bài viết</Table.HeadCell>
+              <Table.HeadCell>Danh mục</Table.HeadCell>
             </Table.Head>
             {posts &&
-              posts.map((post) => (
+              posts.slice(0, 10).map((post) => (
                 <Table.Body key={post._id} className='divide-y'>
                   <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell>
